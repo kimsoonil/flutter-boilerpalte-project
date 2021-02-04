@@ -294,3 +294,4 @@ I will be happy to answer any questions that you may have on this approach, and 
 
 Again to note, this is example can appear as over-architectured for what it is - but it is an example only. If you liked my work, don’t forget to ⭐ star the repo to show your support.
 
+# flutter-boilerpalte-project

@@ -21,11 +21,11 @@ abstract class _LanguageStore with Store {
     Language(code: 'US', locale: 'en', language: 'English'),
     Language(code: 'DK', locale: 'da', language: 'Danish'),
     Language(code: 'ES', locale: 'es', language: 'España'),
+    Language(code: 'KO', locale: 'ko', language: 'Korea'),
   ];
 
   // constructor:---------------------------------------------------------------
-  _LanguageStore(Repository repository)
-      : this._repository = repository {
+  _LanguageStore(Repository repository) : this._repository = repository {
     init();
   }
 
@@ -55,6 +55,8 @@ abstract class _LanguageStore with Store {
       code = "DK";
     } else if (_locale == 'es') {
       code = "ES";
+    } else if (_locale == 'ko') {
+      code = "KO";
     }
 
     return code;

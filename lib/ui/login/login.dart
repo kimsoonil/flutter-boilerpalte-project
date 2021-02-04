@@ -10,9 +10,11 @@ import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
+
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -59,21 +61,24 @@ class _LoginScreenState extends State<LoginScreen> {
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Material(
+        child: Container(
+      color: Colors.white,
       child: Stack(
         children: <Widget>[
           MediaQuery.of(context).orientation == Orientation.landscape
-            ? Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: _buildLeftSide(),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _buildRightSide(),
-                  ),
-                ],
-          ) : Center(child: _buildRightSide()),
+              ? Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: _buildLeftSide(),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: _buildRightSide(),
+                    ),
+                  ],
+                )
+              : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
               return _store.success
@@ -91,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
           )
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildLeftSide() {
@@ -105,19 +110,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildRightSide() {
     return SingleChildScrollView(
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            AppIconWidget(image: 'assets/icons/ic_docswave.png'),
             SizedBox(height: 24.0),
             _buildUserIdField(),
             _buildPasswordField(),
             _buildForgotPasswordButton(),
-            _buildSignInButton()
+            _buildSignInButton(),
+            _signInButton(),
           ],
         ),
       ),
@@ -151,7 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('login_et_user_password'),
+          hint:
+              AppLocalizations.of(context).translate('login_et_user_password'),
           isObscure: true,
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
@@ -174,10 +181,8 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: EdgeInsets.all(0.0),
         child: Text(
           AppLocalizations.of(context).translate('login_btn_forgot_password'),
-          style: Theme.of(context)
-              .textTheme
-              .caption
-              .copyWith(color: Colors.orangeAccent),
+          style:
+              Theme.of(context).textTheme.caption.copyWith(color: Colors.blue),
         ),
         onPressed: () {},
       ),
@@ -187,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignInButton() {
     return RoundedButtonWidget(
       buttonText: AppLocalizations.of(context).translate('login_btn_sign_in'),
-      buttonColor: Colors.orangeAccent,
+      buttonColor: Colors.lightBlue,
       textColor: Colors.white,
       onPressed: () async {
         if (_store.canLogin) {
@@ -213,8 +218,48 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container();
   }
 
+  Widget _signInButton() {
+    return OutlineButton(
+      splashColor: Colors.grey,
+      onPressed: () {
+        signInWithGoogle().then((result) {
+          print('result $result');
+          if (result == 'success') {
+            DeviceUtils.hideKeyboard(context);
+            _store.login();
+          }
+        });
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      highlightElevation: 0,
+      borderSide: BorderSide(color: Colors.grey),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+                image: AssetImage("assets/images/google_logo.png"),
+                height: 35.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                'Sign in with Google',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   // General Methods:-----------------------------------------------------------
-  _showErrorMessage( String message) {
+  _showErrorMessage(String message) {
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createError(
@@ -237,5 +282,4 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordFocusNode.dispose();
     super.dispose();
   }
-
 }

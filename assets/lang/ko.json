@@ -1,0 +1,17 @@
+{
+  "login_start": "다음은 로그인할 문자열 목록",
+  "login_et_user_email": "이메일",
+  "login_et_user_password": "패스워드",
+  "login_btn_forgot_password": "암호를 잊으셨습니까?",
+  "login_btn_sign_in": "로그인",
+  "login_error_fill_fields": "모든 필드를 입력하십시오.",
+  "login_end": "------------------------------------------------------------------------------------",
+
+  "home_start": "문자열 목록",
+  "home_tv_posts": "게시물",
+  "home_tv_error": "에러",
+  "home_tv_no_post_found": "게시물을 찾을 수 없음",
+  "home_tv_choose_language": "언어 선택",
+  "home_end": "-------------------------------------------------------------------------------------"
+
+}

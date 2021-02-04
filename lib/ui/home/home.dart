@@ -48,6 +48,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(),
+      drawer: Drawer(
+          child: ListView(padding: EdgeInsets.zero, children: <Widget>[
+        // 드로워해더 추가
+        DrawerHeader(
+          child: Text('Drawer Header'),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+          ),
+        ),
+        // 리스트타일 추가
+        ListTile(
+          title: Text('Item 1'),
+          onTap: () {
+            // 네이게이터 팝을 통해 드로워를 닫는다.
+            Navigator.pop(context);
+          },
+        ),
+        // 리스트타일 추가
+        ListTile(
+          title: Text('Item 2'),
+          onTap: () {
+            // 드로워를 닫음
+            Navigator.pop(context);
+          },
+        )
+      ])),
     );
   }
 
@@ -223,7 +249,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     color: _languageStore.locale == object.locale
                         ? Theme.of(context).primaryColor
-                        : _themeStore.darkMode ? Colors.white : Colors.black,
+                        : _themeStore.darkMode
+                            ? Colors.white
+                            : Colors.black,
                   ),
                 ),
                 onTap: () {
